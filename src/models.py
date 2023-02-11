@@ -35,6 +35,9 @@ class User(Base):
     firstname = Column(String(250), nullable=False)
     lastname = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
+    follower = relationship("Follower", backref="user", lazy=True)
+    post = relationship("Post", backref="user", lazy=True)
+    comment= relationship("Comment", backref="user", lazy=True)
 
 class Follower(Base):
     __tablename__ = 'follower'
@@ -53,12 +56,15 @@ class Media(Base):
     url = Column(String(250), nullable=False)
     post_id = Column(Integer, ForeignKey('post.id')) 
 
+
 class Post(Base):
     __tablename__ = 'post'
 # Here we define columns for the table person
 # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
+    comment = relationship("Comment", backref="post", lazy=True)
+    media = relationship("Media", backref="post", lazy=True)
 
 class Comment(Base):
     __tablename__ = 'comment'
